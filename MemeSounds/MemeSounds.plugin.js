@@ -52,7 +52,7 @@ module.exports = (() => {
 						return;
 
 					if (!optimistic) {
-						const count = (message.content.match(/nice/gmi) || []).length;
+						const count = (message.content.match(/no?ice/gmi) || []).length;
 				
 						for (let i = 0; i < count; i++) {
 							this.playNice();
@@ -61,15 +61,6 @@ module.exports = (() => {
 						}
 					}
 					
-					if (!optimistic) {
-						const count = (message.content.match(/noice/gmi) || []).length;
-				
-						for (let i = 0; i < count; i++) {
-							this.playNice();
-
-							await new Promise(r => setTimeout(r, this.settings.setting.delay));
-						}
-					}
 				};
 				
 				/* Players */
