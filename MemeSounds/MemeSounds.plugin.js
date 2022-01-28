@@ -1,6 +1,6 @@
 /**
  * @name MemeSounds
- * @version 0.5.4
+ * @version 0.5.3
  * @description Plays Memetastic sounds depending on what is being sent in chat. This was heavily inspired by the idea of Metalloriff's bruh plugin so go check him out!
  * @invite YMqKjWEVxG
  * @author Lonk#6942
@@ -59,14 +59,50 @@ module.exports = (() => {
         stop() {}
     } : (([Plugin, Api]) => {
         const plugin = (Plugin, Library) => {
-    const {Patcher} = Library;
+    
+	/* Constants */
+	const {DiscordModules: {Dispatcher, SelectedChannelStore}} = Api;
+	const audio = new Audio();
+	const {Patcher} = Library;
+	
+	/* Meme Sounds Class */
     return class MemeSounds extends Plugin {
+
+		constructor() {
+			super();
+		}
+
+		getSettingsPanel() {
+			return this.buildSettingsPanel().getElement();
+		}
 
         onStart() {
             Patcher.before(Logger, "log", (t, a) => {
-                a[0] = "Patched Message: Added update stuff" + a[0];
+                a[0] = "Patched Message: Simplified some code." + a[0];
             });
         }
+		
+		messageEvent = async ({ channelId, message, optimistic }) => {
+			if (this.settings.setting.LimitChan && channelId != SelectedChannelStore.getChannelId())
+				return;
+
+			if (!optimistic) {
+				const count = (message.content.match(/no?ice/gmi) || []).length;
+				
+				for (let i = 0; i < count; i++) {
+					this.playNice();
+
+					await new Promise(r => setTimeout(r, this.settings.setting.delay));
+				}
+			}
+					
+		};
+				
+		/* Players */
+		playNice() {
+			audio.src = "https://github.com/Lonk12/BetterDiscordPlugins/raw/main/MemeSounds/Sounds/noice.mp3";
+			audio.play();
+		}
 
         onStop() {
             Patcher.unpatchAll();
