@@ -1,6 +1,6 @@
 /**
  * @name MemeSounds
- * @version 0.5.7
+ * @version 0.5.8
  * @description Plays Memetastic sounds depending on what is being sent in chat. This was heavily inspired by the idea of Metalloriff's bruh plugin so go check him out!
  * @invite YMqKjWEVxG
  * @author Lonk#6942
@@ -13,7 +13,7 @@
 module.exports = (() => {
 	
 	/* Configuration */
-	const config = {info: {name: "Meme Sounds", authors: [{name: "Lonk#6942", discord_id: "557388558017495046", github_username: "Lonk12", twitter_username: "wolfyypaw"}], version: "0.5.7", description: "Plays Memetastic sounds depending on what is being sent in chat. This was heavily inspired by the idea of Metalloriff's bruh plugin so go check him out!", github: "https://github.com/Lonk12/BetterDiscordPlugins/blob/main/MemeSounds/MemeSounds.plugin.js", github_raw: "https://raw.githubusercontent.com/Lonk12/BetterDiscordPlugins/main/MemeSounds/MemeSounds.plugin.js"}, defaultConfig: [{id: "setting", name: "Sound Settings", type: "category", collapsible: true, shown: false, settings: [{id: "LimitChan", name: "Limit to the current channel only.", note: "When enabled, sound effects will only play within the currently selected channel.", type: "switch", value: true}, {id: "delay", name: "Sound effect delay.", note: "The delay in miliseconds between each sound effect.", type: "slider", value: 200, min: 10, max: 1000, renderValue: v => Math.round(v) + "ms"}]}], changelog: [{title: "New Stuff", items: ["Fixed dependencies not installing"]}]};
+	const config = {info: {name: "Meme Sounds", authors: [{name: "Lonk#6942", discord_id: "557388558017495046", github_username: "Lonk12", twitter_username: "wolfyypaw"}], version: "0.5.8", description: "Plays Memetastic sounds depending on what is being sent in chat. This was heavily inspired by the idea of Metalloriff's bruh plugin so go check him out!", github: "https://github.com/Lonk12/BetterDiscordPlugins/blob/main/MemeSounds/MemeSounds.plugin.js", github_raw: "https://raw.githubusercontent.com/Lonk12/BetterDiscordPlugins/main/MemeSounds/MemeSounds.plugin.js"}, defaultConfig: [{id: "setting", name: "Sound Settings", type: "category", collapsible: true, shown: false, settings: [{id: "LimitChan", name: "Limit to the current channel only.", note: "When enabled, sound effects will only play within the currently selected channel.", type: "switch", value: true}, {id: "delay", name: "Sound effect delay.", note: "The delay in miliseconds between each sound effect.", type: "slider", value: 200, min: 10, max: 1000, renderValue: v => Math.round(v) + "ms"}]}], changelog: [{title: "New Stuff", items: ["Added bruh", "added oof"]}]};
 
 	/* Library Stuff */
 	return !global.ZeresPluginLibrary ? class {
@@ -67,6 +67,22 @@ module.exports = (() => {
 
 							await new Promise(r => setTimeout(r, this.settings.setting.delay));
 						}
+
+						const count2 = (message.content.match(/oof/gmi) || []).length;
+
+						for (let i = 0; i < count2; i++) {
+							this.playOof();
+
+							await new Promise(r => setTimeout(r, this.settings.setting.delay));
+						}
+
+						const count3 = (message.content.match(/bruh/gmi) || []).length;
+
+						for (let i = 0; i < count3; i++) {
+							this.playBruh();
+
+							await new Promise(r => setTimeout(r, this.settings.setting.delay));
+						}
 					}
 					
 				};
@@ -81,6 +97,18 @@ module.exports = (() => {
 					audio.src = "https://github.com/Lonk12/BetterDiscordPlugins/raw/main/MemeSounds/Sounds/bazinga.mp3";
 					audio.play();
 					
+				}
+
+				playOof() {
+					audio.src = "https://github.com/Lonk12/BetterDiscordPlugins/blob/main/MemeSounds/Sounds/oof.mp3";
+					audio.play();
+
+				}
+
+				playBruh() {
+					audio.src = "https://github.com/Lonk12/BetterDiscordPlugins/blob/main/MemeSounds/Sounds/bruh.mp3";
+					audio.play();
+
 				}
 				
 				onStop() {
