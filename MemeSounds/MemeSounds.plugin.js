@@ -61,7 +61,6 @@ module.exports = (() => {
 
 					if (!optimistic && lastMessageID != message.id) {
 						lastMessageID = message.id;
-						console.log(sounds);
 						let queue = new Map();
 						for (let sound of sounds) {
 							for (let match of message.content.matchAll(sound.re))
