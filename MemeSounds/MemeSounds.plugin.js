@@ -1,6 +1,6 @@
 /**
  * @name MemeSounds
- * @version 0.5.8
+ * @version 0.5.9
  * @description Plays Memetastic sounds depending on what is being sent in chat. This was heavily inspired by the idea of Metalloriff's bruh plugin so go check him out!
  * @invite YMqKjWEVxG
  * @author Lonk#6942
@@ -13,7 +13,7 @@
 module.exports = (() => {
 	
 	/* Configuration */
-	const config = {info: {name: "Meme Sounds", authors: [{name: "Lonk#6942", discord_id: "557388558017495046", github_username: "Lonk12", twitter_username: "wolfyypaw"}], version: "0.5.8", description: "Plays Memetastic sounds depending on what is being sent in chat. This was heavily inspired by the idea of Metalloriff's bruh plugin so go check him out!", github: "https://github.com/Lonk12/BetterDiscordPlugins/blob/main/MemeSounds/MemeSounds.plugin.js", github_raw: "https://raw.githubusercontent.com/Lonk12/BetterDiscordPlugins/main/MemeSounds/MemeSounds.plugin.js"}, defaultConfig: [{id: "setting", name: "Sound Settings", type: "category", collapsible: true, shown: false, settings: [{id: "LimitChan", name: "Limit to the current channel only.", note: "When enabled, sound effects will only play within the currently selected channel.", type: "switch", value: true}, {id: "delay", name: "Sound effect delay.", note: "The delay in miliseconds between each sound effect.", type: "slider", value: 200, min: 10, max: 1000, renderValue: v => Math.round(v) + "ms"}]}], changelog: [{title: "New Stuff", items: ["Added bruh", "added oof"]}]};
+	const config = {info: {name: "Meme Sounds", authors: [{name: "Lonk#6942", discord_id: "557388558017495046", github_username: "Lonk12", twitter_username: "wolfyypaw"}], version: "0.5.9", description: "Plays Memetastic sounds depending on what is being sent in chat. This was heavily inspired by the idea of Metalloriff's bruh plugin so go check him out!", github: "https://github.com/Lonk12/BetterDiscordPlugins/blob/main/MemeSounds/MemeSounds.plugin.js", github_raw: "https://raw.githubusercontent.com/Lonk12/BetterDiscordPlugins/main/MemeSounds/MemeSounds.plugin.js"}, defaultConfig: [{id: "setting", name: "Sound Settings", type: "category", collapsible: true, shown: false, settings: [{id: "LimitChan", name: "Limit to the current channel only.", note: "When enabled, sound effects will only play within the currently selected channel.", type: "switch", value: true}, {id: "delay", name: "Sound effect delay.", note: "The delay in miliseconds between each sound effect.", type: "slider", value: 200, min: 10, max: 1000, renderValue: v => Math.round(v) + "ms"}, {id: "volume", name: "Sound effect volume.", note: "How loud the sound effects will be.", type: "slider", value: 1, min: 0.01, max: 1, renderValue: v => Math.round(v*100) + "%"}]}], changelog: [{title: "New Stuff", items: ["simplified the code", "fixed oof and bruh sounds not playing", "fixed sound timings", "fixed sounds not being played in the order they are written", "fixed sound overlapping", "added volume slider in settings"]}]};
 
 	/* Library Stuff */
 	return !global.ZeresPluginLibrary ? class {
@@ -31,8 +31,16 @@ module.exports = (() => {
 			
 			/* Constants */
 			const {DiscordModules: {Dispatcher, SelectedChannelStore}} = Api;
-			const audio = new Audio();
-			
+			const sounds = [
+				{re: /no?ice/gmi, file: "noice.mp3", duration: 600},
+				{re: /bazinga/gmi, file: "bazinga.mp3", duration: 550},
+				{re: /oof/gmi, file: "oof.mp3", duration: 250},
+				{re: /bruh/gmi, file: "bruh.mp3", duration: 250}
+			];
+
+			/* Double message event fix */
+			let lastMessageID = null;
+
 			/* Meme Sounds Class */
 			return class MemeSounds extends Plugin {
 				constructor() {
@@ -51,65 +59,23 @@ module.exports = (() => {
 					if (this.settings.setting.LimitChan && channelId != SelectedChannelStore.getChannelId())
 						return;
 
-					if (!optimistic) {
-						const count = (message.content.match(/no?ice/gmi) || []).length;
-				
-						for (let i = 0; i < count; i++) {
-							this.playNice();
-
-							await new Promise(r => setTimeout(r, this.settings.setting.delay));
+					if (!optimistic && lastMessageID != message.id) {
+						lastMessageID = message.id;
+						console.log(sounds);
+						let queue = new Map();
+						for (let sound of sounds) {
+							for (let match of message.content.matchAll(sound.re))
+								queue.set(match.index, sound);
 						}
-						
-						const count1 = (message.content.match(/bazinga/gmi) || []).length;
-				
-						for (let i = 0; i < count1; i++) {
-							this.playBazinga();
-
-							await new Promise(r => setTimeout(r, this.settings.setting.delay));
-						}
-
-						const count2 = (message.content.match(/oof/gmi) || []).length;
-
-						for (let i = 0; i < count2; i++) {
-							this.playOof();
-
-							await new Promise(r => setTimeout(r, this.settings.setting.delay));
-						}
-
-						const count3 = (message.content.match(/bruh/gmi) || []).length;
-
-						for (let i = 0; i < count3; i++) {
-							this.playBruh();
-
-							await new Promise(r => setTimeout(r, this.settings.setting.delay));
+						for (let sound of [...queue.entries()].sort((a, b) => a[0] - b[0])) {
+							let audio = new Audio("https://github.com/Lonk12/BetterDiscordPlugins/raw/main/MemeSounds/Sounds/"+sound[1].file);
+							audio.volume = this.settings.setting.volume;
+							audio.play();
+							await new Promise(r => setTimeout(r, sound[1].duration+this.settings.setting.delay));
 						}
 					}
 					
 				};
-				
-				/* Players */
-				playNice() {
-					audio.src = "https://github.com/Lonk12/BetterDiscordPlugins/raw/main/MemeSounds/Sounds/noice.mp3";
-					audio.play();
-				}
-				
-				playBazinga() {
-					audio.src = "https://github.com/Lonk12/BetterDiscordPlugins/raw/main/MemeSounds/Sounds/bazinga.mp3";
-					audio.play();
-					
-				}
-
-				playOof() {
-					audio.src = "https://github.com/Lonk12/BetterDiscordPlugins/blob/main/MemeSounds/Sounds/oof.mp3";
-					audio.play();
-
-				}
-
-				playBruh() {
-					audio.src = "https://github.com/Lonk12/BetterDiscordPlugins/blob/main/MemeSounds/Sounds/bruh.mp3";
-					audio.play();
-
-				}
 				
 				onStop() {
 					Dispatcher.unsubscribe("MESSAGE_CREATE", this.messageEvent);
