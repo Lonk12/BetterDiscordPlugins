@@ -35,7 +35,10 @@ module.exports = (() => {
 				{re: /no?ice/gmi, file: "noice.mp3", duration: 600},
 				{re: /bazinga/gmi, file: "bazinga.mp3", duration: 550},
 				{re: /oof/gmi, file: "oof.mp3", duration: 250},
+				{re: /fart/gmi, file: "fart.mp3", duration: 550},
+				{re: /bababooey/gmi, file: "bababooey.mp3", duration: 550},
 				{re: /bruh/gmi, file: "bruh.mp3", duration: 470}
+				
 			];
 
 			/* Double message event fix */
@@ -67,7 +70,7 @@ module.exports = (() => {
 								queue.set(match.index, sound);
 						}
 						for (let sound of [...queue.entries()].sort((a, b) => a[0] - b[0])) {
-							let audio = new Audio("https://github.com/Lonk12/BetterDiscordPlugins/raw/main/MemeSounds/Sounds/"+sound[1].file);
+							let audio = new Audio("https://github.com/Jaycario/BetterDiscordPlugins/tree/main/MemeSounds/Sounds"+sound[1].file);
 							audio.volume = this.settings.setting.volume;
 							audio.play();
 							await new Promise(r => setTimeout(r, sound[1].duration+this.settings.setting.delay));
