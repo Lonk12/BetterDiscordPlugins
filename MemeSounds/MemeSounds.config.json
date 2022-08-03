@@ -7,16 +7,16 @@
             "github_username": "Lonk12",
             "twitter_username": "wolfyypaw12"
         }],
-        "version": "0.5.3",
+        "version": "0.6.1",
         "description": "Plays Memetastic sounds depending on what is being sent in chat. This was heavily inspired by the idea of Metalloriff's bruh plugin so go check him out!",
         "github": "https://github.com/Jaycario/BetterDiscordPlugins/blob/main/MemeSounds/MemeSounds.index.js",
         "github_raw": "https://raw.githubusercontent.com/Jaycario/BetterDiscordPlugins/main/MemeSounds/MemeSounds.plugin.js"
     },
     "changelog": [
-        {"title": "New Stuff", "items": ["Added automatic updates", "Added changelog"]},
-        {"title": "Bugs Squashed", "type": "fixed", "items": ["No bugs *yet*"]},
-        {"title": "Improvements", "type": "improved", "items": ["Improvements to the response time"]},
-        {"title": "On-going", "type": "progress", "items": ["More sounds being added", "Other"]}
+        {"title": "New Stuff", "items": ["Added the vine boom sound effect when :moyai: is sent in chat!", "Added changelog!"]},
+        {"title": "Bugs Squashed", "type": "fixed", "items": ["No bugs *yet*."]},
+        {"title": "Improvements", "type": "improved", "items": ["Improvements to the response time!"]},
+        {"title": "On-going", "type": "progress", "items": ["More sounds being added :)", "Other"]}
     ],
     "main": "MemeSounds.index.js"
 }
