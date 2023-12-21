@@ -2,21 +2,49 @@
     "info": {
         "name": "MemeSounds",
         "authors": [{
-            "name": "Lonk#6942",
+            "name": "Lonk1639",
             "discord_id": "557388558017495046",
-            "github_username": "Lonk12",
-            "twitter_username": "wolfyypaw12"
+            "github_username": "Lonk12"
         }],
-        "version": "0.6.1",
-        "description": "Plays Memetastic sounds depending on what is being sent in chat. This was heavily inspired by the idea of Metalloriff's bruh plugin so go check him out!",
+        "version": "1.0.0",
+        "description": "Plays Memetastic sounds depending on what is being sent in chat. This was heavily inspired by the idea of Metalloriff's bruh plugin so please go check him out!",
         "github": "https://github.com/Lonk12/BetterDiscordPlugins/blob/main/MemeSounds/MemeSounds.plugin.js",
         "github_raw": "https://raw.githubusercontent.com/Lonk12/BetterDiscordPlugins/main/MemeSounds/MemeSounds.plugin.js"
     },
     "changelog": [
-        {"title": "New Stuff", "items": ["Added the vine boom sound effect when :moyai: is sent in chat!", "Added changelog!"]},
-        {"title": "Bugs Squashed", "type": "fixed", "items": ["No bugs *yet*."]},
-        {"title": "Improvements", "type": "improved", "items": ["Improvements to the response time!"]},
-        {"title": "On-going", "type": "progress", "items": ["More sounds being added :)", "Other"]}
+        {
+            "title": "New Stuff!?",
+            "items": [
+                "You can now toggle specific sounds on and off!",
+                "Credit to **0x00sec** on discord."
+            ]
+        },
+        {
+            "title": "Bugs Squashed",
+            "type": "fixed",
+            "items": [
+                "**Got off my ass.**",
+                "The plugin."
+            ]
+        },
+        {
+            "title": "Improvements",
+            "type": "improved",
+            "items": [
+                "Code readability.",
+                "The plugin."
+            ]
+        },
+        {
+            "title": "On-Going",
+            "type": "progress",
+            "items": [
+                "Stuff is *totally* going on over here.",
+                "Graduating highschool.",
+                "~~The divorce.~~ ||/j||",
+                "The plugin."
+            ]
+        }
     ],
     "main": "MemeSounds.index.js"
 }
