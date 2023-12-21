@@ -94,11 +94,26 @@ module.exports = ((Plugin, Api) => {
 		]
 	};
 
-	/* Library Stuff */
-	!global.ZeresPluginLibrary ? class {
+	/* Constants */
+	const Api = { DiscordModules: { Dispatcher, SelectedChannelStore } };
+	const sounds = [
+		{ re: /no?ice/gmi, file: "noice.mp3", duration: 600 },
+		{ re: /bazinga/gmi, file: "bazinga.mp3", duration: 550 },
+		{ re: /oof/gmi, file: "oof.mp3", duration: 250 },
+		{ re: /bruh/gmi, file: "bruh.mp3", duration: 470 },
+		{ re: /🗿/gmi, file: "vineboom.mp3", duration: 100 }
+	];
+
+	/* Double message event fix */
+	let lastMessageID = null;
+
+	/* Meme Sounds Class */
+	class MemeSounds extends Plugin {
 		constructor() {
-			this._config = config;
+			super();
+			this.initialized = false
 		}
+
 		getName() {
 			return "MemeSounds"
 		}
@@ -111,74 +126,44 @@ module.exports = ((Plugin, Api) => {
 		getVersion() {
 			return "1.0.0";
 		}
-		start() {
-			if (!global.ZeresPluginLibrary) return window.BdApi.alert("Library Missing", `The library plugin needed for ${this.getName()} is missing.`,
-				{
-					confirmText: "Download Now",
-					cancelText: "Cancel",
-					onConfirm: () => {
-						require("request").get("https://betterdiscord.app/Download?id=9")
-					}
-				})
+
+		getSettingsPanel() {
+			return this.buildSettingsPanel().getElement();
 		}
-		stop() { }
-	} : (([Plugin, Api]))
 
-	const plugin = (Plugin, Api) => {
-		try {
-			/* Constants */
-			const Api = { DiscordModules: { Dispatcher, SelectedChannelStore } };
-			const sounds = [
-				{ re: /no?ice/gmi, file: "noice.mp3", duration: 600 },
-				{ re: /bazinga/gmi, file: "bazinga.mp3", duration: 550 },
-				{ re: /oof/gmi, file: "oof.mp3", duration: 250 },
-				{ re: /bruh/gmi, file: "bruh.mp3", duration: 470 },
-				{ re: /🗿/gmi, file: "vineboom.mp3", duration: 100 }
-			];
+		onStart() {
+			Dispatcher.subscribe("MESSAGE_CREATE", this.messageEvent);
+		}
 
-			/* Double message event fix */
-			let lastMessageID = null;
+		messageEvent = async ({ channelId, message, optimistic }) => {
+			if (this.settings.GeneralSet.LimitChan && channelId != SelectedChannelStore.getChannelId()) {
+				return;
+			}
+			if (!optimistic && lastMessageID != message.id) {
+				lastMessageID = message.id;
+				let queue = new Map();
 
-			/* Meme Sounds Class */
-			class MemeSounds extends Plugin {
-				constructor() {
-					super();
-				}
-
-				getSettingsPanel() {
-					return this.buildSettingsPanel().getElement();
-				}
-
-				onStart() {
-					Dispatcher.subscribe("MESSAGE_CREATE", this.messageEvent);
-				}
-
-				messageEvent = async ({ channelId, message, optimistic }) => {
-					if (this.settings.GeneralSet.LimitChan && channelId != SelectedChannelStore.getChannelId())
-						return;
-
-					if (!optimistic && lastMessageID != message.id) {
-						lastMessageID = message.id;
-						let queue = new Map();
-						for (let sound of sounds) {
-							for (let match of message.content.matchAll(sound.re))
-								queue.set(match.index, sound);
-						}
-						for (let sound of [...queue.entries()].sort((a, b) => a[0] - b[0])) {
-							if (this.settings.ToggleSet[sound[1].file.replace(/\..+$/, "")]) {
-								let audio = new Audio("https://github.com/Lonk12/BetterDiscordPlugins/raw/main/MemeSounds/Sounds/" + sound[1].file);
-								audio.volume = this.settings.GeneralSet.volume;
-								audio.play();
-								await new Promise(r => setTimeout(r, sound[1].duration + this.settings.GeneralSet.delay));
-							}
-						}
+				for (let sound of sounds) {
+					for (let match of message.content.matchAll(sound.re)) {
+						queue.set(match.index, sound);
 					}
-				};
-				onStop() {
-					Dispatcher.unsubscribe("MESSAGE_CREATE", this.messageEvent);
+				}
+				for (let sound of [...queue.entries()].sort((a, b) => a[0] - b[0])) {
+					if (this.settings.ToggleSet[sound[1].file.replace(/\..+$/, "")]) {
+						let audio = new Audio("https://github.com/Lonk12/BetterDiscordPlugins/raw/main/MemeSounds/Sounds/" + sound[1].file);
+						audio.volume = this.settings.GeneralSet.volume;
+						audio.play();
+						await new Promise(r => setTimeout(r, sound[1].duration + this.settings.GeneralSet.delay));
+					}
 				}
 			}
-		} catch (e) { console.error(e); }
-	};
-	return plugin(Api);
-})(global.ZeresPluginLibrary.buildPlugin(plugin));
+		};
+		onStop() {
+			Dispatcher.unsubscribe("MESSAGE_CREATE", this.messageEvent);
+		};
+
+		initialize() {
+			this.initialied = true;
+		}
+	}
+})();
