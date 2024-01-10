@@ -1,0 +1,10 @@
+Discord: FlyMaster#2642
+Discord ID: 459726660359553025
+Github: Apceniy
+Contribution: My first ever contributer, 
+helped reduce latency by a lot
+cleaned up my code in the early days of the plugin.
+
+Discord: 0x00sec
+Contribution: Wrote the code for the sound toggle menu
+Added mmm-chezburger and yippee

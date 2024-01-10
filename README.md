@@ -1,2 +1,3 @@
-# BetterDiscordPlugins
-Better Discord plugins that i've created
+# BetterDiscordPlugins - Broken and W.I.P
+
+Here is where you can see how fucked up and bad my work process is.
