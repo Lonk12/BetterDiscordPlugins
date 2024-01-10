@@ -68,12 +68,12 @@ module.exports = (() => {
 		changelog: [{
 			title: "New Sounds!?",
 			items: [
-				"Mmm-chezburger from Roblox credits to **0x00sec**",
-				"Mario saying `yippee` credits to **0x00sec**",
-				"The hamburger meme",
-				"Mario saying YAHOO!, okiedokie, and hello in Mario64",
+				"Mmm-chezburger from Roblox credits to **0x00sec**.",
+				"Mario saying `yippee` credits to **0x00sec**.",
+				"The hamburger meme.",
+				"Mario saying YAHOO!, okiedokie, and hello in Mario64.",
 				"Ness saying 'ok' from super smash bros.",
-				"The most iconic part of 'moonmen' from basically every vsauce video",
+				"The most iconic part of 'moonmen' from basically every vsauce video.",
 				"**NOTE: this plays when someone says 'what if' and is currently DISABLED by default!**"
 			]
 		},
@@ -90,7 +90,7 @@ module.exports = (() => {
             type: "improved",
             items: [
 				"You can now toggle individual sounds on and off! Credits to **0x00sec** on discord.",
-				"Modified some sound lengths and added sound file metadata",
+				"Modified some sound lengths and added sound file metadata.",
                 "Code readability.",
                 "The plugin."
             ]
